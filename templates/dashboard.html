@@ -1,0 +1,572 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Smart Career</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== SCOPED DASHBOARD ===== */
+body.dashboard-page {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+}
+
+/* ===== OVERLAY ===== */
+.dashboard-page .overlay {
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ===== NAVBAR ===== */
+.dashboard-page .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+
+    padding: 15px 25px;
+    border-radius: 12px;
+    color: white;
+}
+
+.dashboard-page .navbar strong {
+    font-size: 20px;
+}
+
+.dashboard-page .nav-links a {
+    color: white;
+    margin-left: 15px;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.dashboard-page .nav-links a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* ===== GRID DASHBOARD ===== */
+.dashboard-page .grid {
+    margin-top: 40px;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+/* ===== CARD ===== */
+.dashboard-page .card {
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 20px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-page .card::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    top: 0;
+    left: 0;
+    background: linear-gradient(90deg, #4e73df, #1cc88a);
+}
+
+.dashboard-page .card:hover {
+    transform: translateY(-8px) scale(1.03);
+}
+
+/* ===== ICON ===== */
+.dashboard-page .icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+/* ===== TITLE ===== */
+.dashboard-page h2 {
+    margin-bottom: 5px;
+}
+.dashboard-page h1 {
+    margin-bottom: 5px;
+}
+.dashboard-page p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* ===== BUTTON ===== */
+.dashboard-page .btn {
+    margin-top: 15px;
+    padding: 12px;
+    font-size: 15px;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white;
+
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.dashboard-page .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.dashboard-page .navbar {
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+
+/* ===== STATS BOX ===== */
+.dashboard-page .stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 15px;
+}
+
+.dashboard-page .stat-box {
+    flex: 1;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    font-weight: 500;
+    padding: 20px;
+    border-radius: 14px;
+    color: white;
+    text-align: center;
+}
+
+/* ===== FLASH ===== */
+.dashboard-page .flash-container {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dashboard-page .flash-message {
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.dashboard-page .success { background: #22c55e; }
+.dashboard-page .danger { background: #ef4444; }
+.dashboard-page .warning { background: #f59e0b; }
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px) {
+    .dashboard-page .stats {
+        flex-direction: column;
+    }
+}
+
+@media(max-width:768px){
+    h1 {font-size: 22px;}
+    .card {padding: 20px;}
+}
+
+/* FLOAT BUTTON */
+#chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #6366f1;
+    color: white;
+    padding: 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.1);}
+    100% {transform: scale(1);}
+}
+
+/* CHATBOX */
+
+
+.hidden {
+    display: none;
+}
+
+/* HEADER */
+#chatbox {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 320px;
+    height: 420px;
+    background: white;
+    border-radius: 15px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+#chat-header {
+    background: #075e54;
+    color: white;
+    padding: 12px;
+    font-weight: 600;
+}
+
+.user {
+    background: #dcf8c6;
+    color: black;
+    margin-left: auto;
+    border-radius: 10px 10px 0 10px;
+}
+
+.bot {
+    background: #ffffff;
+    border-radius: 10px 10px 10px 0;
+}
+/* MESSAGES */
+#chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background: #f9fafb;
+}
+
+/* MESSAGE BUBBLES */
+.msg {
+    margin: 5px 0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    max-width: 75%;
+}
+
+
+
+/* INPUT */
+#chat-input-area {
+    display: flex;
+    border-top: 1px solid #ddd;
+}
+
+#chat-input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+}
+
+#chat-input:focus {
+    outline: none;
+}
+
+#chat-input-area button {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+#chatbox.active {
+    display: flex;
+}
+.flash-message {
+    transition: opacity 0.5s ease;
+}
+#chatbox {
+    display: none;
+}
+
+#chatbox.active {
+    display: flex;
+}
+.typing {
+    display: flex;
+    gap: 4px;
+    padding: 8px;
+}
+
+.typing span {
+    width: 6px;
+    height: 6px;
+    background: gray;
+    border-radius: 50%;
+    animation: blink 1.4s infinite;
+}
+
+.typing span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.typing span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0%, 80%, 100% { opacity: 0; }
+    40% { opacity: 1; }
+}
+.nav-links a {
+    font-weight: 500;
+}
+
+.nav-links a:last-child {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 8px;
+}
+.stat-box {
+    font-size: 18px;
+    font-weight: 600;
+}
+.card {
+    padding: 35px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+   
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.card h2 {
+    font-size: 20px;
+}
+.card:hover {
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+.btn {
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #1cc88a, #36b9cc);
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+
+
+</style>
+</head>
+
+<body class="dashboard-page">
+
+<div class="overlay">
+
+    <!-- FLASH -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash-message {{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <strong>🚀 Smart Career</strong>
+        <div class="nav-links">
+            <a href="{{ url_for('register') }}">Register</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+            <button onclick="toggleTheme()">🌙</button>
+        </div>
+    </div>
+
+    <h1 style="color:white; margin-top:20px;">
+        Welcome back, {{ session.get('user', 'User') }} 👋
+    </h1>
+    <p style="color:#eee;">Let’s build your career today 🚀</p>
+
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="stat-box">
+            <h3>👤 {{ session.get('user', 'User') }}</h3>
+            <p>Logged in</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>📊 3</h3>
+            <p>Tools Available</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>🚀 Active</h3>
+            <p>Status</p>
+        </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="grid">
+
+        <div class="card">
+            <div class="icon">🎯</div>
+            <h2>Career Recommendation</h2>
+            <p>Get AI-powered career suggestions</p>
+            <a href="{{ url_for('recommendation') }}">
+                <button class="btn">Explore</button>
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="icon">📊</div>
+            <h2>Skill Gap Analysis</h2>
+            <p>Find missing skills & improve</p>
+            <a href="{{ url_for('skill_gap') }}">
+                <button class="btn">Analyze</button>
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="icon">📚</div>
+            <h2>Courses</h2>
+            <p>Learn with curated resources</p>
+            <a href="{{ url_for('courses', all='true') }}">
+                <button class="btn">View Courses</button>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+// 🔔 Flash auto hide
+document.querySelectorAll(".flash-message").forEach((msg) => {
+    setTimeout(() => {
+        msg.style.opacity = "0";
+        msg.style.transform = "translateY(-10px)";
+        
+        setTimeout(() => {
+            msg.remove();
+        }, 500);
+
+    }, 3000);
+});
+// 💬 Toggle Chat
+function toggleChat() {
+    let chat = document.getElementById("chatbox");
+
+    chat.classList.toggle("active");
+
+    // 🔥 Clear chat when opening
+    if (chat.classList.contains("active")) {
+        localStorage.removeItem("chatHistory");
+        document.getElementById("chat-messages").innerHTML = "";
+    }
+}
+
+function clearChat() {
+    localStorage.removeItem("chatHistory");
+    document.getElementById("chat-messages").innerHTML = "";
+}
+
+// 🧠 CHAT MEMORY
+let chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+
+// Load old messages
+window.onload = function() {
+    if (chatHistory.length === 0) {
+        addMessage("👋 Ask me:\n• Career for PCM\n• Courses after commerce\n• Resume tips\n• Skills to learn", "bot");
+    } else {
+        chatHistory.forEach(msg => addMessage(msg.text, msg.type));
+    }
+};
+
+// ➕ Add message
+function addMessage(text, type) {
+    let div = document.createElement("div");
+    div.classList.add("msg", type);
+    div.innerText = text;
+
+    document.getElementById("chat-messages").appendChild(div);
+    document.getElementById("chat-messages").scrollTop = 9999;
+}
+
+// 🚀 Send Message
+function sendMessage() {
+    let input = document.getElementById("chat-input");
+    let message = input.value.trim().toLowerCase();
+
+    if (message === "") return;
+
+    addMessage(message, "user");
+
+    // typing effect
+    let typing = document.createElement("div");
+    typing.classList.add("msg", "bot");
+    typing.innerText = "Typing...";
+    document.getElementById("chat-messages").appendChild(typing);
+
+    fetch("/chatbot", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({message: message})
+    })
+    .then(res => res.json())
+    .then(data => {
+        typing.remove();
+        addMessage(data.reply, "bot");
+    })
+    .catch(err => console.log(err));
+
+    input.value = "";
+}
+
+// ⌨ Enter key support
+document.getElementById("chat-input").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
+});
+</script>
+
+<!-- 💬 FLOAT BUTTON -->
+<div id="chat-toggle" onclick="toggleChat()">💬</div>
+
+<!-- 💬 CHATBOX -->
+<div id="chatbox">
+   <div id="chat-header">
+       Career Bot 🤖
+      <span onclick="clearChat()">🗑</span>
+      <span onclick="toggleChat()">✖</span>
+   </div>
+
+    <div id="chat-messages"></div>
+
+    <div id="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Ask about career, skills...">
+        <button onclick="sendMessage()">➤</button>
+    </div>
+</div>
+
+
+</body>
+</html>

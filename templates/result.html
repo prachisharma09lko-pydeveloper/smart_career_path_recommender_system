@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Career Recommendation Report</title>
+   
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+           
+            background: #f4f6f9;
+            
+        }
+
+.sidebar {
+    width: 250px;
+    background: rgba(30, 60, 114, 0.95);
+    color: white;
+    height: 100vh;
+    padding: 25px;
+    position: fixed;   /* FIX */
+    left: 0;
+    top: 0;
+}
+
+.sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+          
+    color: white;
+}
+        
+
+.sidebar a {
+            display: block;
+            padding: 12px;
+            margin: 10px 0;
+            text-decoration: none;
+            color: white;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+
+.sidebar a:hover {
+            border-right: 1px solid #ddd;
+            background: #4e73df;
+
+        }
+
+.content {
+            
+    color: #222;
+    margin-left: 250px;   /* 🔥 MAIN FIX */
+    padding: 30px;
+    background: #f4f6f9;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+.card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            transition: 0.3s ease;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+.chart-container {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+       
+
+ul, ol {
+    padding-left: 20px;
+}
+
+
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+button {
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+h2, h3 {
+    color: #222;
+}
+
+
+h3 {
+    border-left: 5px solid #4e73df;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+
+/* FIX OVERFLOW */
+* {
+    box-sizing: border-box;
+}
+
+
+.skill-btn {
+    background: linear-gradient(135deg,#4e73df,#1cc88a);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.skill-btn:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* BUTTON GROUP */
+.btn-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+/* MAIN BUTTON */
+.action-btn {
+    background: linear-gradient(135deg,#4e73df,#1cc88a);
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* HOVER EFFECT */
+.action-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+}
+
+/* SECONDARY BUTTON */
+.secondary-btn {
+    background: #858796;
+}
+
+.secondary-btn:hover {
+    background: #6c757d;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .chart-container {
+        width: 100%;
+    }
+}
+
+
+    </style>
+</head>
+
+<body>
+    
+    <body class="result-page">
+
+<div class="sidebar">
+    <h2>Smart Career</h2>
+    <a href="{{ url_for('recommendation') }}">🎯 New Recommendation</a>
+    <a href="{{ url_for('history') }}">📜 History</a>
+    <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+</div>
+
+<div class="content">
+
+
+  {% if result and result|length > 0 %}
+
+    <h2>🎯 Your Personalized Career Report</h2>
+
+   <div class="card" style="
+    text-align:center;
+    background: linear-gradient(135deg,#4e73df,#1cc88a);
+    color:white;
+    border-radius:15px;
+    padding:30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    ">
+    <h2>🎯 Your Best Career Match</h2>
+    <h1 style="font-size:32px;">{{ result[0].career }}</h1>
+    <p style="font-size:18px;">Match Score: {{ result[0].confidence }}%</p>
+
+     <p style="font-size:14px; opacity:0.9;">
+    This recommendation is based on your skills, interests, and performance analysis.
+    </p>
+    </div>
+
+    <!-- Top 3 Careers -->
+    <div class="card">
+        <h3>Top 3 Career Recommendations</h3>
+
+        {% if result %}
+       <ul>
+           {% for item in result %}
+          <li style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        
+           <span style="font-weight:600;">
+             {{ item.career }}
+           </span>
+
+           <span style="
+            background:#4e73df;
+            color:white;
+            padding:5px 10px;
+            border-radius:12px;
+            font-size:12px;
+            min-width:60px;
+            text-align:center;
+             ">
+            {{ item.confidence }}%
+          </span>
+
+         </li>
+          {% endfor %}
+     </ul>
+      
+        {% else %}
+            <p>No recommendations available.</p>
+        {% endif %}
+
+      <p style="color:#4e73df; font-weight:600;">
+        Model Accuracy: {{ accuracy }}%
+      </p>
+         <!-- 👇 Skill Gap Button -->
+      <div class="btn-group">
+
+       <a href="{{ url_for('skill_gap', career=result[0].career) }}">
+        <button class="action-btn">📊 Skill Gap</button>
+      </a>
+
+       <a href="{{ url_for('courses') }}">
+        <button class="action-btn">📚 Courses</button>
+       </a>
+
+       <a href="{{ url_for('recommendation') }}">
+        <button class="action-btn secondary-btn">🔄 Try Again</button>
+       </a>
+
+      </div>
+
+     <hr>
+
+     <h3>Why this career?</h3>
+
+     <ul>
+        {% for reason in explanation %}
+         
+          <li style="margin-bottom:6px;">
+          ✔ {{ reason }}
+          </li>
+        {% endfor %}
+     </ul>
+
+
+    </div>
+
+
+
+    <!-- Graph -->
+    <div class="card">
+        <h3>📊 Career Match Analysis</h3>
+        <div class="chart-container">
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+
+    <!-- Career Details -->
+    <div class="card">
+
+        {% if career_info %}
+
+        <h3>Skills Required</h3>
+        <ul>
+            {% for skill in career_info.get('skills', []) %}
+                <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Certification Courses</h3>
+        <ul>
+            {% for cert in career_info.get('certifications', []) %}
+                <li>{{ cert }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Tools to Learn</h3>
+        <ul>
+            {% for tool in career_info.get('tools', []) %}
+                <li>{{ tool }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Career Roadmap</h3>
+        <ol>
+            {% for step in career_info.get('roadmap', []) %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+
+        <h3>Resume Tips</h3>
+        <p>{{ career_info.get('resume_tips', 'No tips available.') }}</p>
+
+        {% else %}
+            <p>No career details available for this career.</p>
+        {% endif %}
+
+    </div>
+
+    {% else %}
+   <p style="text-align:center; font-size:18px; color:red;">
+     No recommendation found. Try again.
+   </p>
+{% endif %}
+
+</div>
+
+<script>
+    const dataFromFlask = {{ result | tojson | safe if result else '[]' }};
+
+    if (dataFromFlask.length > 0) {
+
+        const labels = dataFromFlask.map(item => item.career);
+        const values = dataFromFlask.map(item => item.confidence);
+
+        new Chart(document.getElementById('chart'), {
+    type: 'bar',
+    data: {
+        labels: labels,
+       datasets: [{
+    label: 'Career Match %',
+    data: values,
+
+    backgroundColor: [
+        'rgba(78, 115, 223, 0.7)',
+        'rgba(28, 200, 138, 0.7)',
+        'rgba(54, 185, 204, 0.7)'
+    ],
+
+    borderColor: [
+        '#4e73df',
+        '#1cc88a',
+        '#36b9cc'
+    ],
+
+    borderWidth: 2,
+    borderRadius: 12,
+    hoverBackgroundColor: [
+        '#4e73df',
+        '#1cc88a',
+        '#36b9cc'
+    ]
+}]
+    },
+    options: {
+    responsive: true,
+
+    plugins: {
+        legend: {
+            display: false
+        },
+        tooltip: {
+            backgroundColor: '#333',
+            titleColor: '#fff',
+            bodyColor: '#fff'
+        }
+    },
+
+    scales: {
+        y: {
+            beginAtZero: true,
+            max: 100,
+            grid: {
+                color: '#eee'
+            }
+        },
+        x: {
+            grid: {
+                display: false
+            }
+        }
+    },
+
+    animation: {
+        duration: 1200,
+        easing: 'easeOutQuart'
+    }
+}
+});
+    }
+</script>
+
+</body>
+</html>

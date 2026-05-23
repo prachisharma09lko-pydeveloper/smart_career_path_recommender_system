@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body class="page-bg admin-bg">
+
+<div class="overlay">
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div><strong>Admin Panel</strong></div>
+        <div>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        </div>
+    </div>
+
+
+    <div class="container">
+
+        <!-- Analytics Card -->
+        <div class="card">
+
+            <h2>Admin Analytics Dashboard</h2>
+
+            <p><strong>Total Users:</strong> {{ total_users }}</p>
+
+            <p><strong>Total Predictions:</strong> {{ total_predictions }}</p>
+
+            <p>
+                <strong>Most Recommended Career:</strong>
+                {{ most_career_name }} ({{ most_career_count }} times)
+            </p>
+
+        </div>
+
+
+        <!-- Graph Card -->
+        <div class="card">
+
+            <h3>Career Recommendation Analytics</h3>
+
+            <canvas id="careerChart"></canvas>
+
+        </div>
+
+
+        <!-- Career Count List -->
+        <div class="card">
+
+            <h3>Career Recommendation Count</h3>
+
+            <ul>
+
+            {% for career,count in career_data %}
+
+                <li>{{ career }} — {{ count }}</li>
+
+            {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+var ctx = document.getElementById('careerChart').getContext('2d');
+
+var careerChart = new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: {{ careers | tojson }},
+
+        datasets: [{
+            label: 'Career Recommendations',
+            data: {{ counts | tojson }},
+            backgroundColor: 'rgba(54, 162, 235, 0.6)'
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+            legend: {
+                display: true
+            }
+        }
+
+    }
+
+});
+
+</script>
+
+
+</body>
+</html>

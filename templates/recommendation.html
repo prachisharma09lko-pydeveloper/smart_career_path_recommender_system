@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Career Assessment</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('/static/images/recommend-bg.jpg');
+    background-size: cover;
+}
+
+/* MAIN LAYOUT */
+.main-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 20px;
+    align-items: stretch; /* IMPORTANT */
+}
+
+/* LEFT QUIZ */
+.quiz-section {
+    flex: 2;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;   /* IMPORTANT */
+    height: 85vh;             /* SAME HEIGHT CONTROL */
+}
+/* RIGHT PANEL */
+.side-panel {
+    flex: 1;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 20px;
+     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    height: 85vh;   /* SAME HEIGHT */
+    overflow-y: auto;
+}
+/* QUESTIONS */
+.question {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border-left: 4px solid #4e73df;
+}
+
+.question:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* OPTIONS */
+.options label {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid #d1d5db;
+    margin: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.options input {
+    display: none;
+}
+
+.options input:checked + span {
+    background: linear-gradient(135deg,#4e73df,#1cc88a);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+/* SCORE */
+.score-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.score-card {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white;
+    padding: 20px;
+    border-radius: 18px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.score-card h3 {
+    font-size: 28px;
+}
+.score-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+/* FORM */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+/* BUTTONS */
+.finish-btn {
+    margin-top: 10px;
+    padding: 10px;
+    background: #4e73df;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    position: sticky;
+    bottom: 0;
+}
+
+.btn-success {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    background: linear-gradient(135deg,#4e73df,#1cc88a);
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.finish-btn:hover, .btn-success:hover {
+    transform: scale(1.02);
+}
+#quiz-area {
+    flex: 1;             
+    overflow-y: auto;    
+    padding-right: 5px;
+}
+.progress-bar {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+#progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg,#4e73df,#1cc88a);
+    border-radius: 10px;
+    transition: 0.3s;
+}
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .quiz-section, .side-panel {
+        height: auto;
+    }
+
+    #quiz-area {
+        max-height: none;
+    }
+}
+html {
+    scroll-behavior: smooth;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<h1 style="text-align:center;">🎯 AI Career Recommendation System</h1>
+
+<div class="main-container">
+
+<!-- LEFT -->
+<div class="quiz-section">
+    <h2>🧠 Career Quiz</h2>
+    <div id="quiz-area"></div>
+
+    <div class="progress-bar">
+        <div id="progress"></div>
+    </div>
+
+    <button type="button" class="finish-btn" onclick="calculateScore()">
+        🎯 Finish Quiz
+    </button>
+</div>
+
+<!-- RIGHT -->
+<div class="side-panel">
+
+    <h3>📊 Your Score</h3>
+
+    <div class="score-box">
+        <div class="score-card"><p>Aptitude</p><h3 id="aptitude">0</h3></div>
+        <div class="score-card"><p>Communication</p><h3 id="communication">0</h3></div>
+        <div class="score-card"><p>Technical</p><h3 id="technical">0</h3></div>
+        <div class="score-card"><p>Math</p><h3 id="math">0</h3></div>
+        <div class="score-card"><p>Creativity</p><h3 id="creativity">0</h3></div>
+    </div>
+
+    <form method="POST" action="/recommendation" onsubmit="return checkScore()">
+
+        <!-- HIDDEN INPUTS -->
+        <input type="hidden" name="aptitude" id="aptitude_input">
+        <input type="hidden" name="communication" id="communication_input">
+        <input type="hidden" name="technical_skill_score" id="technical_input">
+        <input type="hidden" name="math_score" id="math_input">
+        <input type="hidden" name="creativity_score" id="creativity_input">
+
+        <div class="form-group">
+            <label>🎓 Stream</label>
+            <select name="stream">
+                {% for s in streams %}
+                <option value="{{ s }}">{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>💡 Interest</label>
+            <select name="interest">
+                {% for i in interests %}
+                <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>⚡ Skill Level</label>
+            <select name="skill_level" id="skillLevel">
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-success">
+            🚀 Get Recommendation
+        </button>
+
+    </form>
+
+</div>
+
+</div>
+
+<script>
+
+// QUESTIONS
+const questions = [
+{q:"How well can you solve logical puzzles?", type:"aptitude"},
+{q:"Do you enjoy analytical thinking and problem solving?", type:"aptitude"},
+{q:"How clearly can you express your ideas?", type:"communication"},
+{q:"How comfortable are you speaking in public?", type:"communication"},
+{q:"How much do you enjoy working with computers or technology?", type:"technical"},
+{q:"How interested are you in learning new tools or software?", type:"technical"},
+{q:"How confident are you in mathematics?", type:"math"},
+{q:"How much do you enjoy solving numerical problems?", type:"math"},
+{q:"How creative do you consider yourself?", type:"creativity"},
+{q:"How much do you enjoy writing, drawing, or creative work?", type:"creativity"}
+];
+
+// LOAD
+window.onload = function() {
+    let html = "";
+
+    questions.forEach((q,i)=>{
+        html += `
+        <div class="question">
+            <p>${i+1}. ${q.q}</p>
+            <div class="options">
+                <label><input type="radio" name="q${i}" value="10" data-type="${q.type}"><span> Strongly Agree</span></label>
+                <label><input type="radio" name="q${i}" value="7" data-type="${q.type}"><span> Agree</span></label>
+                <label><input type="radio" name="q${i}" value="4" data-type="${q.type}"><span> Neutral</span></label>
+                <label><input type="radio" name="q${i}" value="1" data-type="${q.type}"><span> Disagree</span></label>
+            </div>
+        </div>`;
+    });
+
+    document.getElementById("quiz-area").innerHTML = html;
+}
+
+// SCORE
+function calculateScore() {
+
+    let scores = {aptitude:0, communication:0, technical:0, math:0, creativity:0};
+    let counts = {aptitude:0, communication:0, technical:0, math:0, creativity:0};
+
+    let checked = document.querySelectorAll("input[type=radio]:checked");
+
+    if(checked.length < questions.length){
+        alert("⚠️ Answer all questions!");
+        return;
+    }
+
+    checked.forEach(el=>{
+        let type = el.dataset.type;
+        scores[type] += parseInt(el.value);
+        counts[type]++;
+    });
+
+    for(let key in scores){
+        scores[key] = Math.round((scores[key]/(counts[key]*10))*100);
+
+        document.getElementById(key).innerText = scores[key];
+        document.getElementById(key+"_input").value = scores[key];
+    }
+
+    let avg = Object.values(scores).reduce((a,b)=>a+b,0)/5;
+
+    let skill = "Beginner";
+    if(avg >= 75) skill = "Advanced";
+    else if(avg >= 50) skill = "Intermediate";
+
+    document.getElementById("skillLevel").value = skill;
+}
+
+// CHECK
+function checkScore() {
+    if(!document.getElementById("aptitude_input").value){
+        alert("⚠️ Finish quiz first!");
+        return false;
+    }
+    return true;
+}
+function updateProgress() {
+    let checked = document.querySelectorAll("input[type=radio]:checked").length;
+    let percent = (checked / questions.length) * 100;
+    document.getElementById("progress").style.width = percent + "%";
+}
+
+document.addEventListener("change", updateProgress);
+
+function animateValue(id, start, end, duration) {
+    let obj = document.getElementById(id);
+    let range = end - start;
+    let startTime = null;
+
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        let progress = timestamp - startTime;
+        let value = Math.floor(progress / duration * range + start);
+        obj.innerText = value;
+
+        if (progress < duration) {
+            requestAnimationFrame(step);
+        } else {
+            obj.innerText = end;
+        }
+    }
+
+    requestAnimationFrame(step);
+}
+
+
+</script>
+
+</body>
+</html>                

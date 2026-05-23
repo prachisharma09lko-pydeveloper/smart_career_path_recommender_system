@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction History</title>
+</head>
+<body>
+
+<h2>Prediction History</h2>
+
+<a href="{{ url_for('dashboard') }}">
+    <button type="button">Back to Dashboard</button>
+</a>
+
+<br><br>
+
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Username</th>
+        <th>Recommended Career</th>
+    </tr>
+
+    {% for row in rows %}
+    <tr>
+        <td>{{ session["user"] }}</td>
+        <td>{{ row[0] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

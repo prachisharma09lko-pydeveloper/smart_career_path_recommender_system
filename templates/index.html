@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Career Path Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+/* ONLY HOME PAGE CONTROL */
+.home-page {
+    background: linear-gradient(to bottom, #f8fafc, #eef4ff);
+}
+
+.home-page .hero {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    min-height: 88vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 70px 60px;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.home-page .hero-left {
+    max-width: 560px;
+}
+
+.home-page .hero-left h1 {
+    font-size: 52px;
+    line-height: 1.1;
+    font-weight: 700;
+    margin-bottom: 18px;
+    letter-spacing: -1px;
+
+}
+
+.home-page .hero-left p {
+    font-size: 20px;
+    line-height: 1.6;
+    color: #dbeafe;
+    max-width: 500px;
+}
+
+.home-page .trust-line {
+    font-size: 14px;
+    color: #cbd5e1;
+    margin-bottom: 18px;
+}
+
+/* BUTTONS */
+.home-page .hero-buttons {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.home-page .hero-buttons button {
+    padding: 14px 26px;
+    border: none;
+    border-radius: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+}
+
+.home-page .hero-buttons button:first-child {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+}
+
+.home-page .hero-buttons .secondary-btn {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.35);
+}
+
+.home-page .hero-buttons button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+}
+
+.home-page .hero-buttons button:first-child:hover {
+    transform: translateY(-4px);
+    background: #2e59d9;
+}
+
+.home-page .hero-buttons .secondary-btn:hover {
+    transform: translateY(-4px);
+    background: white;
+    color: #1e293b;
+}
+
+/* IMAGE */
+.home-page .hero-right img {
+    width: 360px;
+    max-width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.28);
+    border: 1px solid rgba(255,255,255,0.18);
+}
+
+/* FEATURES */
+.home-page .features {
+    padding: 40px 24px 42px;
+    background: #f8fafc;
+    text-align: center;
+}
+
+.home-page .features h2 {
+    margin-bottom: 28px;
+    color: #0f172a;
+}
+
+.home-page .feature-box {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+.home-page .feature {
+    width: 250px;
+    background: #ffffff;
+    padding: 30px 24px;
+    border-radius: 22px;
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+    border-top: 5px solid #4e73df;
+    transition: all 0.3s ease;
+}
+
+.home-page .feature:hover {
+    transform: translateY(-10px) scale(1.01);
+    box-shadow: 0 26px 48px rgba(15, 23, 42, 0.14);
+}
+
+.home-page .features h2,
+.home-page .how-it-works h2 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 18px;
+    letter-spacing: -0.5px;
+}
+/* HOW IT WORKS */
+.home-page .how-it-works {
+    padding: 42px 24px 48px;
+    background: #eef4ff;
+    text-align: center;
+}
+
+.home-page .steps {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.home-page .step {
+    width: 280px;
+    background: #ffffff;
+    padding: 34px 24px;
+    border-radius: 20px;
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.home-page .step:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 24px 44px rgba(15, 23, 42, 0.12);
+}
+
+
+
+.home-page .step h3 {
+    color: #0f172a;
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.home-page .step p {
+    color: #475569;
+    line-height: 1.6;
+}
+
+
+
+/* CTA */
+.home-page .cta {
+    padding: 56px 24px;
+    text-align: center;
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white;
+}
+
+.home-page .cta h2 {
+    margin-bottom: 12px;
+    font-size: 40px;
+}
+
+.home-page .cta p {
+    color: #ecfeff;
+    margin-bottom: 24px;
+}
+.home-page .cta button {
+    background: #ffffff;
+    color: #1f2937;
+    padding: 16px 38px;
+    border-radius: 16px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 18px 34px rgba(0,0,0,0.18);
+    transition: all 0.3s ease;
+    font-size: 16px;
+    letter-spacing: 0.4px;
+}
+
+.home-page .cta button:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 0 25px rgba(255,255,255,0.5);
+}
+
+/* FOOTER */
+.home-page .footer {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-align: center;
+    padding: 16px;
+    font-size: 15px;
+}
+
+/* 🔥 RESPONSIVE */
+@media (max-width: 768px) {
+    .home-page .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 50px 20px;
+    }
+
+    .home-page .hero-left h1 {
+        font-size: 34px;
+    }
+
+    .home-page .hero-left p {
+        font-size: 15px;
+    }
+
+    .home-page .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .home-page .hero-buttons button {
+        width: 100%;
+    }
+
+    .home-page .feature,
+    .home-page .step {
+        width: 100%;
+        max-width: 340px;
+    }
+
+    .home-page .cta h2 {
+        font-size: 30px;
+    }
+}
+/* =========================
+   HOME NAVBAR
+========================= */
+/* ================= NAVBAR FINAL ================= */
+
+.home-page .home-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 40px;
+
+    /* clean glass effect */
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* LOGO */
+.home-page .logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;  /* FIX: now clearly visible */
+    letter-spacing: 0.3px;
+}
+
+/* NAV LINKS */
+.home-page .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* NORMAL LINKS */
+.home-page .nav-links a {
+    text-decoration: none;
+    color: #cbd5f5;  /* soft visible color */
+    font-weight: 500;
+    transition: all 0.25s ease;
+    padding: 6px 4px;
+    position: relative;
+}
+
+/* REMOVE ugly white hover background */
+.home-page .nav-links a:hover {
+    color: #ffffff;
+}
+
+/* NICE underline animation (premium feel) */
+.home-page .nav-links a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    left: 0;
+    bottom: -4px;
+    background: linear-gradient(90deg, #4e73df, #00c6a7);
+    transition: 0.3s;
+}
+
+.home-page .nav-links a:hover::after {
+    width: 100%;
+}
+
+/* REGISTER BUTTON */
+.home-page .nav-links .nav-btn {
+    padding: 10px 20px;
+    border-radius: 14px;
+
+    background: linear-gradient(135deg, #4e73df, #00c6a7);
+    color: white !important;
+
+    font-weight: 600;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    transition: all 0.3s ease;
+}
+
+/* BUTTON HOVER */
+.home-page .nav-links .nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.3);
+}
+
+
+
+
+
+
+/* =========================
+   DEMO PREVIEW
+========================= */
+.home-page .demo-preview {
+    padding: 48px 24px;
+    text-align: center;
+    background: #ffffff;
+}
+
+.home-page .demo-preview h2 {
+    font-size: 36px;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.home-page .demo-preview > p {
+    color: #475569;
+    margin-bottom: 28px;
+    font-size: 17px;
+}
+
+.home-page .demo-card {
+    max-width: 760px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.10);
+    padding: 30px;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.home-page .demo-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 46px rgba(15, 23, 42, 0.14);
+}
+
+.home-page .demo-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.home-page .demo-top h3 {
+    font-size: 24px;
+    color: #0f172a;
+    margin: 0;
+}
+
+.home-page .match-badge {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.home-page .demo-content p {
+    color: #334155;
+    margin-bottom: 12px;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+/* =========================
+   FAQ
+========================= */
+.home-page .faq-section {
+    padding: 48px 24px;
+    background: #f8fafc;
+    text-align: center;
+}
+
+.home-page .faq-section h2 {
+    font-size: 36px;
+    color: #0f172a;
+    margin-bottom: 28px;
+}
+
+.home-page .faq-box {
+    max-width: 860px;
+    margin: 0 auto 18px;
+    background: white;
+    padding: 24px;
+    border-radius: 18px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+    text-align: left;
+    border-left: 5px solid #4e73df;
+    transition: all 0.3s ease;
+}
+.home-page .faq-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.10);
+}
+
+.home-page .faq-box h3 {
+    margin-bottom: 10px;
+    color: #0f172a;
+    font-size: 20px;
+}
+
+.home-page .faq-box p {
+    color: #475569;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+    .home-page .home-navbar {
+        flex-direction: column;
+        gap: 14px;
+        padding: 16px 20px;
+    }
+
+    .home-page .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+    }
+
+    .home-page .demo-card {
+        padding: 22px;
+    }
+
+    .home-page .demo-top h3 {
+        font-size: 20px;
+    }
+
+    .home-page .demo-preview h2,
+    .home-page .faq-section h2 {
+        font-size: 30px;
+    }
+
+    .hero-right img {
+    width: 100%;
+    max-width: 300px;
+}
+}
+html {
+    scroll-behavior: smooth;
+}
+.fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease;
+}
+
+.fade-in.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+button::after {
+    content: "";
+    position: absolute;
+    width: 300%;
+    height: 300%;
+    background: rgba(255,255,255,0.2);
+    top: -100%;
+    left: -100%;
+    transform: rotate(45deg);
+    transition: 0.5s;
+}
+
+button:hover::after {
+    top: 0;
+    left: 0;
+}
+.home-page .hero-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    image-rendering: auto;
+}
+.section-divider {
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    margin: 20px auto 30px;
+    border-radius: 10px;
+}
+.home-page .feature h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #0f172a;
+}
+
+.home-page .feature p {
+    font-size: 14px;
+    color: #64748b;
+}
+.home-page .features,
+.home-page .how-it-works,
+.home-page .faq-section {
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+.home-page .why-us {
+    padding: 50px 24px;
+    text-align: center;
+    background: #ffffff;
+}
+
+.home-page .why-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.home-page .why-grid div {
+    width: 220px;
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 18px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.home-page .why-grid div:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+.home-page .testimonials {
+    padding: 50px 24px;
+    text-align: center;
+    background: #f8fafc;
+}
+
+.home-page .testimonial-box {
+    max-width: 600px;
+    margin: 20px auto;
+    background: white;
+    padding: 24px;
+    border-radius: 18px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    font-style: italic;
+    transition: 0.3s ease;
+}
+
+.home-page .testimonial-box:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+.home-page .testimonial-box h4 {
+    margin-top: 10px;
+    font-weight: 600;
+    color: #4e73df;
+}
+.faq-answer {
+    display: none;
+    margin-top: 10px;
+    color: #555;
+}
+
+.faq-box.active .faq-answer {
+    display: block;
+}
+
+.faq-box {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.faq-box:hover {
+    background: #f5f5f5;
+}
+.nav-links a.active {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* GLOBAL HOVER SMOOTHNESS */
+.feature, .step, .testimonial-box, .why-grid div {
+    transition: all 0.3s ease;
+}
+.feature {
+    text-align: center;
+}
+.feature:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+#progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg,#4e73df,#1cc88a);
+    width: 0%;
+    z-index: 9999;
+}
+section {
+    padding: 60px 0;
+}
+.testimonial-card {
+    background: #ffffff;
+    opacity: 1;
+    color: #333;
+}
+.testimonial-box p {
+    color: #1e293b;   /* darker */
+}
+
+.testimonial-box h4 {
+    color: #2563eb;
+}
+h2 {
+    font-weight: 600;
+}
+
+.card p {
+    font-weight: 400;
+}
+.step-card:hover {
+    transform: translateY(-5px);
+    transition: 0.3s;
+}
+.hero-left p:last-child {
+    text-align: left;/* ya center */
+    opacity: 0.9;
+    margin-top: 10px;
+}
+[id] {
+    scroll-margin-top: 80px;
+}
+.home-page .why-grid div {
+    opacity: 1;
+}
+
+
+
+
+</style>
+
+</head>
+<body class="home-page">
+
+    <div id="progress-bar"></div>
+
+    <div class="home-navbar">
+    <div class="logo">🚀 Smart Career</div>
+
+    <div class="nav-links">
+        <a href="#demo-preview">Demo</a>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}" class="nav-btn">Register</a>
+    </div>
+</div>
+
+
+
+
+<!-- HERO SECTION -->
+<div class="hero">
+
+    <div class="hero-left">
+         <p class="trust-line">
+           🔥 Trusted by 5,000+ students • AI-powered career guidance
+        </p>
+        <h1>🚀 Smart Career Recommendation System</h1>
+        <p>Discover your perfect career path using AI-powered analysis based on your skills and interests.</p>
+
+        <div class="hero-buttons">
+          <button onclick="window.location.href='{{ url_for('login') }}'">
+               🚀 Get Started Free
+          </button>
+          <button class="secondary-btn" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">
+             🔍 Learn More
+          </button>
+        </div>
+
+         <p style="margin-top:15px; font-size:14px; color:#cbd5e1;">
+           ✔ No signup required • ✔ Instant results • ✔ 100% Free
+        </p>
+    </div>
+
+    <div class="hero-right">
+        <img src="{{ url_for('static', filename='images/home.jpg') }}" alt="career">
+    </div>
+
+</div>
+
+<div id="demo-preview" class="demo-preview fade-in">
+    <h2>🔍 Sample Career Insight</h2>
+    <div class="section-divider"></div>
+    <p>See how our AI recommendation looks before you get started.</p>
+
+    <div class="demo-card">
+        <div class="demo-top">
+            <h3>Suggested Career: Data Scientist</h3>
+            <span class="match-badge">89% Match</span>
+        </div>
+
+        <div class="demo-content">
+            <p><strong>Top Skills:</strong> Python, Data Analysis, Problem Solving</p>
+            <p><strong>Recommended Next Step:</strong> Learn statistics and build 2 real-world projects.</p>
+            <p><strong>Suggested Course Path:</strong> Python → SQL → Machine Learning</p>
+        </div>
+         <button style="
+         margin-top:15px;
+        padding:10px 20px;
+        border:none;
+        border-radius:10px;
+        background:linear-gradient(135deg,#4e73df,#1cc88a);
+        color:white;
+        cursor:pointer;
+        font-weight:600;
+        transition:0.3s;
+        "
+        onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+           🚀 Try Demo
+        </button>
+    </div>
+</div>
+
+
+<!-- FEATURES -->
+<div id="features" class="features fade-in">
+
+    <h2>✨ Features</h2>
+    <div class="section-divider"></div>
+
+    <div class="feature-box">
+        <div class="feature">
+           🎯 AI Recommendation
+          <p>Get career suggestions based on your profile</p>   
+        </div>
+          <div class="feature">
+            📊 Skill Analysis
+            <p>Analyze your strengths and skills easily</p>
+         </div>
+
+        <div class="feature">
+           📈 Career Graph
+          <p>Visualize your career growth path</p>
+        </div>
+
+        <div class="feature">
+           📚 Course Suggestions
+           <p>Get recommended courses for your goal</p>
+        </div>
+    </div>
+
+</div>
+
+<div class="why-us fade-in">
+    <h2>💡 Why Choose Us?</h2>
+    <div class="section-divider"></div>
+
+    <div class="why-grid">
+         <div>
+            <h4>⚡ Instant Insights</h4>
+            <p>Get career results within seconds</p>
+        </div>
+        <div>
+             <h4>🎯 Accurate Match</h4>
+             <p>Highly accurate AI recommendations</p>
+        </div>
+        <div>
+            <h4>🔒 Secure Data</h4>
+            <p>Your information is completely safe</p>
+        </div>
+
+        <div>
+            <h4>📊 Real Insights</h4>
+            <p>Data-driven career suggestions</p>
+        </div>
+    </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testimonials fade-in">
+    <h2>⭐ What Students Say</h2>
+    <div class="section-divider"></div>
+
+    <div class="testimonial-box">
+        <p>"This helped me choose my career path easily!"</p>
+        <h4>- Computer Science Student</h4>
+    </div>
+
+    <div class="testimonial-box">
+        <p>"Very accurate recommendations and easy to use!"</p>
+        <h4>- B.Tech Student, India</h4>
+    </div>
+</div>
+
+
+
+
+<!-- HOW IT WORKS -->
+<div id="how-it-works" class="how-it-works fade-in">
+
+    <h2>⚙️ How It Works</h2>
+    <div class="section-divider"></div>
+
+    <div class="steps">
+
+        <div class="step">
+            <h3>1️⃣ Enter Details</h3>
+            <p>Provide your skills and interests.</p>
+        </div>
+
+        <div class="step">
+            <h3>2️⃣ AI Analysis</h3>
+            <p>System analyzes your profile.</p>
+        </div>
+
+        <div class="step">
+            <h3>3️⃣ Get Result</h3>
+            <p>Get best career recommendation.</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CTA SECTION -->
+<div class="cta">
+
+    <h2>🚀 Start Your Career Journey Today</h2>
+    <p>Get personalized career recommendations instantly.</p>
+
+     <button onclick="startLoading(this); window.location.href='{{ url_for('login') }}'">
+         Get Started Now
+     </button>
+</div>
+
+<div class="faq-section fade-in">
+    <h2>❓ Frequently Asked Questions</h2>
+    <div class="section-divider"></div>
+
+    <div class="faq-box" onclick="toggleFAQ(this)">
+         <h3>How does the recommendation work?</h3>
+         <p class="faq-answer">Our system analyzes your skills, interests, and preferences to suggest the most suitable career path.</p>
+    </div>
+
+    <div class="faq-box" onclick="toggleFAQ(this)">
+         <h3>Is this recommendation personalized?</h3>
+         <p class="faq-answer">Yes, each recommendation is based on the user’s own input and profile details.</p>
+    </div>
+
+    <div class="faq-box" onclick="toggleFAQ(this)">
+         <h3>Can I also see courses and skill guidance?</h3>
+         <p class="faq-answer">Yes, after recommendation, the system can guide you with skills, roadmap, and relevant learning resources.</p>
+    </div>
+</div>
+
+
+<!-- FOOTER -->
+<div class="footer">
+    <p>© 2026 Smart Career</p>
+    <p style="font-size:13px; opacity:0.7;">Built with ❤️ using AI</p>
+</div>
+
+<script>
+
+// ✅ SABSE UPAR YEH ADD KARO
+const elements = document.querySelectorAll(".fade-in");
+const sections = document.querySelectorAll("[id]");
+const navLinks = document.querySelectorAll(".nav-links a");
+
+// ✅ SIRF EK HI SCROLL EVENT RAKHO
+window.addEventListener("scroll", () => {
+
+    // ANIMATION
+    elements.forEach((el, index) => {
+        const position = el.getBoundingClientRect().top;
+        if (position < window.innerHeight - 80) {
+            setTimeout(() => {
+                el.classList.add("show");
+            }, index * 150);
+        }
+    });
+
+    // PROGRESS BAR
+    let scroll = document.documentElement.scrollTop;
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let percent = (scroll / height) * 100;
+    document.getElementById("progress-bar").style.width = percent + "%";
+
+    // NAV ACTIVE
+    let current = "";
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (scrollY >= sectionTop - 100) {
+            current = section.getAttribute("id");
+        }
+    });
+
+    navLinks.forEach(a => {
+        a.classList.remove("active");
+        if (a.getAttribute("href") === "#" + current) {
+            a.classList.add("active");
+        }
+    });
+
+});
+
+// OTHER FUNCTIONS
+function startLoading(btn) {
+    btn.innerText = "Loading...";
+    btn.disabled = true;
+}
+
+function toggleFAQ(el) {
+    el.classList.toggle("active");
+}
+
+</script>
+
+
+
+</body>
+
+</html>

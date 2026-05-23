@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - Smart Career</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script>
+        function togglePassword() {
+            var x = document.getElementById("password");
+            x.type = (x.type === "password") ? "text" : "password";
+        }
+
+        // 🔥 PASSWORD LIVE VALIDATION
+        function checkPassword() {
+           let pass = document.getElementById("password").value;
+
+           document.getElementById("password-rules").style.display = "block";
+
+           let rule1 = pass.length >= 8;
+           let rule2 = /[A-Z]/.test(pass);
+           let rule3 = /[a-z]/.test(pass);
+           let rule4 = /[0-9]/.test(pass);
+           let rule5 = /[@#$%^&*]/.test(pass);
+
+           updateRule("rule1", rule1);
+           updateRule("rule2", rule2);
+           updateRule("rule3", rule3);
+           updateRule("rule4", rule4);
+           updateRule("rule5", rule5);
+
+          let bar = document.getElementById("strength-bar");
+
+          let score = [rule1, rule2, rule3, rule4, rule5].filter(Boolean).length;
+
+          if (score <= 2) {
+              bar.style.width = "30%";
+              bar.style.background = "red";
+          } else if (score <= 4) {
+              bar.style.width = "70%";
+              bar.style.background = "orange";
+          } else {
+              bar.style.width = "100%";
+              bar.style.background = "green";
+          }
+          
+          let text = document.getElementById("strength-text");
+
+          if (score <= 2) {
+             text.innerText = "Weak Password";
+             text.style.color = "red";
+        } 
+        else if (score <= 4) {
+            text.innerText = "Medium Password";
+            text.style.color = "orange";
+       } 
+        else {
+            text.innerText = "Strong Password";
+            text.style.color = "green";
+        }
+
+}
+        function updateRule(id, condition) {
+          let el = document.getElementById(id);
+          let text = el.dataset.text;
+
+          el.innerHTML = condition ? "✔ " + text : "❌ " + text;
+          el.style.color = condition ? "green" : "red";
+}
+
+        function showRules() {
+        document.getElementById("password-rules").style.display = "block";
+    }
+
+    // ✅ NEW FUNCTION (यही add करना है)
+        function hideRules() {
+    let pass = document.getElementById("password").value;
+    if (pass === "") {
+        document.getElementById("password-rules").style.display = "none";
+    }
+}
+        // 🔥 EMAIL VALIDATION
+        function validateEmail() {
+            let email = document.getElementById("email").value;
+            let msg = document.getElementById("email-msg");
+
+            let pattern = /^[^@]+@[^@]+\.[^@]+$/;
+
+            if (!pattern.test(email)) {
+                msg.innerHTML = "Invalid Email Format";
+                msg.style.color = "red";
+            } else {
+                msg.innerHTML = "Valid Email";
+                msg.style.color = "green";
+            }
+        }
+
+        /* 🔥 ADD THIS FUNCTION HERE 👇 */
+        function checkConfirmPassword() {
+            let pass = document.getElementById("password").value;
+            let confirm = document.getElementById("confirm_password").value;
+            let msg = document.getElementById("confirm-msg");
+
+            if (confirm === "") {
+               msg.innerHTML = "";
+               return;
+            }
+
+            if (pass === confirm) {
+               msg.innerHTML = "✅ Passwords match";
+               msg.style.color = "green";
+            } else {
+              msg.innerHTML = "❌ Passwords do not match";
+              msg.style.color = "red";
+            }
+}
+    </script>
+    <style>
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== BODY ===== */
+body.register-page {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8f9fc);
+    padding-top: 70px;  /* 🔥 ADD THIS */
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    backdrop-filter: blur(12px);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.nav-links a {
+    color: white;
+    margin-left: 15px;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+}
+
+.nav-links .active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+.nav-links a:hover {
+    transform: scale(1.05);
+}
+
+.logout-btn {
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    color: white;
+}
+/* ===== MAIN LAYOUT ===== */
+.register-container {
+    display: flex;
+    min-height: calc(100vh - 70px);   /* 🔥 CHANGE */
+    width: 100%;
+}
+/* ===== LEFT SIDE ===== */
+.register-left {
+    flex: 1;
+    position: relative;
+
+    background: linear-gradient(
+        rgba(0,0,0,0.15),
+        rgba(0,0,0,0.15)
+    ),
+    url("{{ url_for('static', filename='images/register-bg.jpg') }}"); /* 🔥 FIX IMAGE */
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: auto;
+    min-height: 100%;
+}
+.register-left, .register-right {
+    width: 50%;
+}
+
+
+.register-left::before {
+    display: none;
+}
+
+
+
+.register-left h1 {
+    font-size: 42px;
+}
+
+.register-left p {
+    color: #ddd;
+}
+
+/* ===== RIGHT SIDE ===== */
+.register-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #eef2ff, #f8f9fc);
+}
+
+/* ===== CARD ===== */
+.card {
+    background: rgba(255,255,255,0.92);
+    padding: 25px;
+
+    border-radius: 16px;
+    width: 100%;
+    max-width: 420px;  
+
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    backdrop-filter: blur(12px);
+}
+.card form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;   /* 🔥 controls height */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* ===== INPUT BOX ===== */
+.input-group {
+    margin-bottom: 12px;
+}
+
+.input-group label {
+    font-size: 13px;
+    color: #444;
+}
+.input-field {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px;
+    background: #f8fafc;
+    gap: 10px;
+    transition: all 0.25s ease;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.input-field input {
+    border: none;
+    outline: none;
+    flex: 1;
+    background: transparent;
+    font-size: 14px;
+    color: #111;
+}
+
+.input-field:focus-within {
+    border: 1px solid #6366f1;
+    box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+}
+
+.input-field:hover {
+    transform: scale(1.01);
+}
+
+.input-field span {
+    font-size: 16px;
+}
+
+
+.input-box input::placeholder {
+    color: #aaa;
+}
+
+.input-box input:focus {
+    border-color: #4facfe;
+    box-shadow: 0 0 8px rgba(79,172,254,0.6);
+}
+
+/* 👁 Eye */
+.input-box span:last-child {
+    right: 10px;
+    left: auto;
+    cursor: pointer;
+}
+
+/* ===== PASSWORD RULES ===== */
+#password-rules {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-top: 12px;
+    padding: 14px;
+    font-size: 13px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+#password-rules.show {
+    max-height: 200px;
+}
+
+/* ===== BUTTON ===== */
+.register-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    padding: 13px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.register-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(99,102,241,0.4);
+}
+
+/* ===== GOOGLE BUTTON ===== */
+.google-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+
+    border: 1px solid #ddd;
+    background: #fff;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    transition: 0.3s;
+}
+
+.google-btn:hover {
+    background: #f9fafb;
+    border-color: #bbb;
+    transform: scale(1.02);
+}
+
+/* ===== TERMS ===== */
+.terms {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    margin: 15px 0;
+}
+
+/* ===== FLASH ===== */
+.flash-message {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.flash-message.success {
+    background: #22c55e;
+}
+
+.flash-message.danger {
+    background: #ef4444;
+}
+
+/* ===== EMAIL TICK ===== */
+#email-tick {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .register-container {
+        flex-direction: column;
+    }
+
+    .register-left {
+        display: none;
+    }
+
+    .register-right {
+        padding: 20px;
+    }
+}
+#strength-bar {
+    transition: width 0.4s ease;
+}
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+    color: white;
+    width: 80%;
+}
+
+.overlay h1 {
+    font-size: 42px;
+    font-weight: 600;
+}
+
+.overlay p {
+    font-size: 16px;
+    opacity: 0.9;
+}
+html, body {
+    height: 100%;
+}
+#strength-text {
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.loader {
+    border: 2px solid white;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+  </style>
+
+</head>
+<body class="register-page">
+
+<!-- ✅ NAVBAR (OUTSIDE) -->
+ <div class="navbar">
+        <div class="logo">🚀 Smart Career</div>
+
+        <div class="nav-links">
+            <a href="/login">Login</a>
+            <a href="/register" class="active">Register</a>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+</div>
+
+
+<!-- ✅ MAIN CONTAINER -->
+<div class="register-container">
+
+    <!-- LEFT SIDE -->
+    <div class="register-left">
+    <div class="overlay">
+        <h1>Smart Career</h1>
+        <p>AI-powered career guidance platform 🚀</p>
+    </div>
+</div>
+
+    <!-- RIGHT SIDE -->
+    <div class="register-right">
+        <div class="card">
+
+            <h2>Register</h2>
+
+            <!-- FLASH -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+
+            <!-- FORM -->
+            <form method="POST" action="{{ url_for('register') }}" autocomplete="off">
+
+                
+                <div class="input-group">
+                   <label>Username</label>
+                   <div class="input-field">
+                       <span>👤</span>
+                       <input type="text" name="username" required>
+                    </div>
+                </div>
+                
+
+                <div class="input-group">
+                     <label>Email</label>
+                    <div class="input-field">
+                        <span>📧</span>
+                       <input type="email" name="email" onkeyup="validateEmail()"
+                        required>
+                    </div>
+                </div>
+                
+                <small id="email-msg"></small>
+                
+                  
+                <div class="input-group">
+                     <label>Password</label>
+                     <div class="input-field">
+                        <span>🔒</span>
+                        <input type="password" id="password" name="password"
+                        onfocus="showRules()"
+                        onkeyup="checkPassword()"
+                        onblur="hideRules()"
+                        required>
+                        <span class="eye" onclick="togglePassword()">👁️</span>
+                     </div>
+                </div>
+                
+
+                <div style="height:5px; background:#ddd; border-radius:5px; margin:10px 0;">
+                        <div id="strength-bar" style="height:5px; width:0%; background:red;"></div>
+                </div>
+                
+                <small id="strength-text" style="display:block; margin-bottom:10px;"></small>
+
+                
+                
+
+                <div class="input-group">
+                    <label>Confirm Password</label>
+                    <div class="input-field">
+                       <span>🔁</span>
+                       <input type="password" id="confirm_password" name="confirm_password" onkeyup="checkConfirmPassword()"
+                        required> 
+                    </div>
+                </div>
+                <small id="confirm-msg" style="display:block; margin-top:5px;"></small>
+                
+
+                <!-- RULES -->
+                <div id="password-rules" style="display:none; text-align:left; font-size:13px;">
+                    <p><strong>Password must include:</strong></p>
+                    <ul>
+                       <li id="rule1" data-text="Minimum 8 characters">Minimum 8 characters</li>
+                       <li id="rule2" data-text="1 Uppercase letter">1 Uppercase letter</li>
+                       <li id="rule3" data-text="1 Lowercase letter">1 Lowercase letter</li>
+                       <li id="rule4" data-text="1 Number">1 Number</li>
+                       <li id="rule5" data-text="1 Special character (@#$%^&*)">1 Special character (@#$%^&*)</li>
+                    </ul>
+                </div>
+                
+
+                
+                <label class="terms">
+                   <input type="checkbox" id="terms" required>
+                    <span>I agree to Terms & Conditions</span>
+                </label>
+
+                
+
+                 <button type="submit" onclick="showLoading(this)" class="register-btn">
+                      <span class="text">Register</span>
+                      <span class="loader" style="display:none;"></span>
+                 </button>
+
+
+            </form>
+            
+
+            <!-- 🔥 DIVIDER -->
+<div style="text-align:center; margin:15px 0;">
+  <hr style="border:0.5px solid #ddd;">
+  <p style="margin:8px 0; color:#777;">OR</p>
+</div>
+
+<!-- 🔥 GOOGLE LOGIN -->
+<a href="/google_login?next=register" class="google-btn">
+      <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" width="18">
+    Sign up with Google
+</a>
+
+            
+            
+
+            
+
+            <p style="text-align:center; margin-top:15px;">
+                  Already have an account? 
+                 <a href="{{ url_for('login') }}" style="color:#4e73df;">Login</a>
+            </p>
+
+        </div>
+    </div>
+
+</div> 
+
+
+
+<script>
+function showRules() {
+    document.getElementById("password-rules").classList.add("show");
+}
+
+function hideRules() {
+    let pass = document.getElementById("password").value;
+    if (pass === "") {
+        document.getElementById("password-rules").classList.remove("show");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const messages = document.querySelectorAll(".flash-message");
+
+    messages.forEach((msg) => {
+        setTimeout(() => {
+            msg.classList.add("hide");
+        }, 3000);
+
+        setTimeout(() => {
+            msg.remove();
+        }, 3600);
+    });
+});
+
+window.addEventListener("pageshow", function (event) {
+    if (event.persisted) {
+        const messages = document.querySelectorAll(".flash-message");
+        messages.forEach((msg) => msg.remove());
+    }
+});
+
+document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", () => {
+        if (input.value.length > 0) {
+            input.style.border = "1px solid #22c55e";
+        } else {
+            input.style.border = "1px solid #ddd";
+        }
+    });
+});
+
+document.querySelector("form").addEventListener("submit", function(e) {
+
+    let terms = document.getElementById("terms");
+
+    if (!terms.checked) {
+        alert("Please accept Terms & Conditions");
+        e.preventDefault();
+        return;
+    }
+
+    let btn = document.querySelector(".register-btn");
+
+    btn.querySelector(".text").innerText = "Creating Account...";
+    btn.querySelector(".loader").style.display = "inline-block";
+    btn.disabled = true;
+});
+
+function showLoading(btn) {
+    btn.querySelector(".text").style.display = "none";
+    btn.querySelector(".loader").style.display = "inline-block";
+}
+
+function checkEmail() {
+    let email = document.getElementById("email").value;
+    let tick = document.getElementById("email-tick");
+
+    let pattern = /^[^@]+@[^@]+\.[^@]+$/;
+
+    if(pattern.test(email)) {
+        tick.style.display = "block";
+        tick.style.color = "green";
+    } else {
+        tick.style.display = "none";
+    }
+}
+
+</script>
+
+</body>
+</html>

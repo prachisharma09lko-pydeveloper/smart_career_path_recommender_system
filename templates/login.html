@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - Smart Career</title>
+   
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        function togglePassword() {
+            var x = document.getElementById("password");
+            x.type = (x.type === "password") ? "text" : "password";
+        }
+    </script>
+
+    <style>
+/* ===== LAYOUT ===== */
+.login-container {
+    display: flex;
+    min-height: 100vh; /* FIX */
+    flex-wrap: wrap;   /* IMPORTANT */
+}
+
+/* LEFT SIDE */
+.login-left {
+    background: linear-gradient(
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.55)
+    ),
+    url("{{ url_for('static', filename='images/login-bg.jpg') }}");
+    animation: zoomBg 12s infinite alternate;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+    padding: 40px;
+    background-blend-mode: overlay;
+}
+@keyframes zoomBg {
+    from { background-size: 100%; }
+    to { background-size: 110%; }
+}
+
+/* subtle circle effect */
+.login-left::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    bottom: -50px;
+    right: -50px;
+}
+
+
+.brand {
+    text-align: center;
+    animation: fadeInLeft 1s ease;
+}
+
+.brand h1 {
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.7);
+
+}
+
+.brand p {
+    margin-top: 10px;
+    font-size: 16px;
+    opacity: 1;
+    color: #e5e7eb;
+}
+
+/* RIGHT SIDE */
+.login-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     background: linear-gradient(135deg, #eef2ff, #f8f9fc);
+}
+
+/* LOGIN BOX */
+.login-box {
+    background: rgba(255,255,255,0.85);
+    padding: 35px;
+    border-radius: 18px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 420px;
+    animation: fadeInUp 0.8s ease;
+    backdrop-filter: blur(15px);
+}
+.login-box h2 {
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+/* INPUT */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    font-size: 13px;
+    color: #444;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+/* OPTIONS */
+.options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+/* BUTTON */
+.login-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+}
+.login-btn:active {
+    transform: scale(0.98);
+}
+
+/* DIVIDER */
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 12px;
+    color: #888;
+}
+
+/* GOOGLE */
+.google-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.google-btn:hover {
+    background: #f5f5f5;
+}
+
+/* BOTTOM TEXT */
+.bottom-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    .login-container {
+        flex-direction: column;
+    }
+
+    .login-left {
+        display: none;
+    }
+
+    .login-right {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 100%;
+        box-shadow: none;
+        border-radius: 12px;
+    }
+}
+.flash-container {
+    position: fixed;
+    margin-bottom: 15px;
+    top: 20px;   /* 👈 thoda niche lao */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999; /* 👈 high priority */
+    width: auto;
+    max-width: 90%;
+    display: block !important;
+}
+
+.flash-message {
+     padding: 14px 22px;
+    margin-bottom: 10px;
+    border-radius: 14px;
+    font-weight: 500;
+    min-width: 280px;
+    text-align: center;
+    color: white;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: slideDown 0.5s ease;
+    border: 2px solid black;
+    animation: slideDown 0.4s ease;
+    background: rgba(0,0,0,0.6);
+    
+    
+}
+
+/* TYPES */
+.flash-message.success {
+    background: linear-gradient(135deg, #00c853, #43a047);
+    color: white;
+}
+
+.flash-message.danger {
+    background: linear-gradient(135deg, #ff1744, #d50000);
+    color: white;
+}
+
+.flash-message.warning {
+    background: linear-gradient(135deg, #ff9100, #ff6d00);
+    color: white;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bottom-text a {
+    color: #4e73df;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.bottom-text a:hover {
+    text-decoration: underline;
+}
+
+.input-group input:focus {
+    border: 1px solid #4e73df;
+    box-shadow: 0 0 8px rgba(78,115,223,0.3);
+    outline: none;
+}
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.input-field {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f9fafc;
+    transition: 0.3s;
+    position: relative;
+    gap: 10px;
+}
+.input-field:hover {
+    border-color: #4e73df;
+    transform: scale(1.01);
+}
+
+.input-field span {
+    margin-right: 8px;
+    font-size: 16px;
+}
+.input-field .eye {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+
+.input-field input {
+    border: none;
+    outline: none;
+    flex: 1;
+    width: 100%;
+    padding: 14px 10px;
+    background: transparent;
+}
+
+.login-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.input-field:focus-within {
+    border: 1px solid #4e73df;
+    box-shadow: 0 0 8px rgba(78,115,223,0.4);
+}
+.input-field label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    color: #999;
+    transition: 0.3s;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+.input-field input:focus + label,
+.input-field input:not(:placeholder-shown) + label {
+    top: -8px;
+    font-size: 11px;
+    color: #667eea;
+}
+
+.input-field input:focus + label,
+.input-field input:valid + label {
+    top: -8px;
+    left: 8px;
+    font-size: 11px;
+    background: white;
+    padding: 0 5px;
+    color: #667eea;
+}
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+#strength {
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+.input-error {
+    border: 1px solid red !important;
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-4px); }
+    100% { transform: translateX(0); }
+}
+.brand img {
+    animation: float 3s ease-in-out infinite;
+    width: 130px;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    background: white;
+    padding: 10px;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+.login-left::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom right,
+        rgba(0,0,0,0.6),
+        rgba(0,0,0,0.3)
+    );
+}
+.divider {
+    font-size: 12px;
+    color: #aaa;
+    position: relative;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    height: 1px;
+    width: 40%;
+    background: #ddd;
+    position: absolute;
+    top: 50%;
+}
+
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -30px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+.left-section {
+    position: relative;
+}
+
+.left-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45); /* dark overlay */
+}
+.login-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow:  0 10px 30px rgba(0,0,0,0.2),
+        inset 0 1px 1px rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.2);
+    animation: fadeIn 0.8s ease;
+}
+input {
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: #6a5acd;
+    box-shadow: 0 0 8px rgba(106,90,205,0.4);
+}
+.left-text h1 {
+    color: white;
+    font-weight: 700;
+}
+
+.left-text p {
+    color: #ddd;
+}
+.ai-box {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+input {
+    background: rgba(255,255,255,0.7);
+    border: none;
+    border-radius: 12px;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #667eea;
+}
+h2 {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+p {
+    font-size: 14px;
+    color: #666;
+}
+.left-text {
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px);}
+    50% { transform: translateY(-10px);}
+    100% { transform: translateY(0px);}
+}
+.login-btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+.loader {
+    border: 3px solid #fff;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+.spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 3px solid white;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+.login-box:hover {
+    transform: translateY(-3px);
+    transition: 0.3s;
+    box-shadow: 0 25px 60px rgba(102,126,234,0.3);
+}
+
+/* ===== MATCH LOGIN STYLE ===== */
+
+/* RIGHT SIDE BACKGROUND */
+.register-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #eef2ff, #f8f9fc);
+    padding: 40px;
+}
+
+/* CARD → LOGIN BOX STYLE */
+.card {
+    background: rgba(255,255,255,0.9);
+    padding: 35px;
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 380px;
+    animation: fadeInUp 0.8s ease;
+}
+
+/* INPUT BOX → CONVERT TO LOGIN STYLE */
+.input-box {
+    margin-bottom: 15px;
+}
+
+/* INPUT FIELD STYLE LIKE LOGIN */
+.input-box input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.7);
+}
+
+/* FOCUS EFFECT */
+.input-box input:focus {
+    border: 1px solid #4e73df;
+    box-shadow: 0 0 8px rgba(78,115,223,0.3);
+    outline: none;
+}
+
+/* REMOVE BROKEN ICON POSITIONING */
+.input-box span {
+    position: static;
+    margin-right: 5px;
+}
+
+/* PASSWORD EYE FIX */
+.input-box span:last-child {
+    float: right;
+    cursor: pointer;
+    margin-top: -30px;
+}
+
+/* PASSWORD RULE BOX */
+#password-rules {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f9fafc;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+/* BUTTON SAME AS LOGIN */
+.register-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(118,75,162,0.4);
+}
+
+/* TERMS CLEAN */
+#terms {
+    margin-right: 5px;
+}
+
+label {
+    font-size: 13px;
+}
+
+/* LOGIN TEXT */
+.register-link-btn {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #4e73df;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.register-link-btn:hover {
+    text-decoration: underline;
+}
+
+/* LEFT SIDE SAME ANIMATION */
+.register-left {
+    animation: zoomBg 12s infinite alternate;
+}
+.eye {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.7;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.eye:hover {
+    opacity: 1;
+}
+.error-msg {
+    color: red;
+    font-size: 12px;
+    display: none; /* 👈 hidden by default */
+    margin-top: 4px;
+}
+
+</style>
+</head>
+
+<body>
+    
+
+<div class="login-container">
+
+    <!-- LEFT SIDE (Brand / Image) -->
+    <div class="login-left">
+        <div class="brand">
+            <h1>Smart Career</h1>
+            <p>AI-powered career guidance platform</p>
+            <img src="{{ url_for('static', filename='images/ai.png') }}" 
+             style="width:120px; margin-top:20px;">
+
+            <br>
+            <p style="font-size:14px; opacity:0.8;">
+                 🚀 Discover your future career path  
+                 🎯 Get AI recommendations  
+                 📈 Grow your skills
+            </p>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE (Login Form) -->
+    <div class="login-right">
+
+        <div class="login-box">
+
+        <h2>Welcome Back 👋</h2>
+            <p class="subtitle">Login to continue</p>
+
+            <!-- Flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="flash-container">
+                     {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                           {{ message }}
+                        </div>
+                     {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
+            {% if session.attempts >= 3 %}
+            <p style="color:red; font-size:13px; text-align:center; margin-bottom:10px;">
+             ⚠ Too many attempts. Try later.
+            </p>
+            {% endif %}
+
+            
+
+            <!-- FORM -->
+            <form method="POST" action="{{ url_for('login') }}"  onsubmit="showLoading(this.querySelector('button'))" autocomplete="off">
+
+                <input type="text" name="fakeuser" autocomplete="username" style="display:none">
+                <input type="password" name="fakepass" autocomplete="new-password" style="display:none">
+
+
+                
+    
+
+                 <div class="input-group">
+                    <label>Email or Username</label>
+                    <div class="input-field">
+                         <span>👤</span>
+                         <input type="text" name="login_id" autocomplete="new-password" required>
+                    </div>
+                    <small class="error-msg">Please enter username or email</small>
+                 </div>
+
+                <div class="input-group">
+                     <label>Password</label>
+                     <div class="input-field">
+                         <span>🔒</span>
+                          <input type="password" id="password" name="password" autocomplete="new-password" required>
+                         <span class="eye" onclick="togglePassword()">👁️</span>
+                     </div>
+                    <small class="error-msg">Password is required</small>
+                     <small id="strength"></small>
+                </div>
+                
+                 <div class="options">
+                    <label>
+                      <input type="checkbox" name="remember"> Remember me
+                    </label>
+
+                    <a href="{{ url_for('forgot_password') }}">Forgot?</a>
+                 </div>
+
+                <button type="submit" class="login-btn"
+                {% if session.attempts >= 3 %} disabled {% endif %}>
+                <span class="btn-text">Login</span>
+                <span class="spinner"></span>
+                </button>
+            </form>
+
+            <div class="divider">OR</div>
+
+            <a href="/google_login?next=login" class="google-btn">
+                <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" width="18">
+                Continue with Google
+            </a>
+            <p class="bottom-text">
+                Don’t have an account?
+                <a href="{{ url_for('register') }}">Register</a>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+setTimeout(() => {
+    document.querySelectorAll(".flash-message").forEach(el => {
+        el.style.transition = "0.5s";
+        el.style.opacity = "0";
+        setTimeout(() => el.remove(), 500);
+    });
+}, 3000);
+
+
+
+// 🔥 Input live border color (NEW FEATURE)
+document.querySelectorAll(".input-field input").forEach(input => {
+    input.addEventListener("input", () => {
+        if (input.value.length > 0) {
+            input.style.border = "1px solid #22c55e";
+        } else {
+            input.style.border = "1px solid #ddd";
+        }
+    });
+});
+
+// 🔥 LOADING BUTTON FUNCTION 
+function showLoading(btn) {
+    btn.querySelector(".btn-text").style.display = "none";
+    btn.querySelector(".spinner").style.display = "inline-block";
+    btn.disabled = true;
+}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    // 🔥 PASSWORD STRENGTH
+    document.getElementById("password").addEventListener("input", function() {
+        let val = this.value;
+        let msg = document.getElementById("strength");
+
+        if (val.length < 6) {
+            msg.innerHTML = "Weak";
+            msg.style.color = "red";
+        } else if (val.length < 10) {
+            msg.innerHTML = "Medium";
+            msg.style.color = "orange";
+        } else {
+            msg.innerHTML = "Strong";
+            msg.style.color = "green";
+        }
+    });
+
+     document.querySelector("form").addEventListener("submit", function(e) {
+        let inputs = document.querySelectorAll("input[required]");
+        let valid = true;
+
+        inputs.forEach(input => {
+            let group = input.closest(".input-group");
+            let errorMsg = group ? group.querySelector(".error-msg") : null;
+
+            if (!input.value.trim()) {
+                input.classList.add("input-error");
+                if (errorMsg) errorMsg.style.display = "block";
+                valid = false;
+            } else {
+                if (errorMsg) errorMsg.style.display = "none";
+            }
+        });
+
+        if (!valid) e.preventDefault();
+    });
+
+
+});
+window.addEventListener("pageshow", function() {
+    document.querySelectorAll(".input-field input").forEach(input => {
+        input.value = "";
+    });
+});
+</script>
+
+</body>
+</html>
